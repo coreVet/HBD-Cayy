@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- 🔥 INI WAJIB UNTUK MOBILE -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Selamat Ulang Tahun mama 🎉</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            text-align: center;
+
+            background: linear-gradient(to bottom, #ffecd2, #fcb69f);
+            background-attachment: fixed;
+
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 30px 20px;
+        }
+
+        h1 {
+            color: #d6336c;
+
+            /* ✅ FONT RESPONSIVE */
+            font-size: clamp(26px, 5vw, 40px);
+
+            margin-top: 20px;
+        }
+
+        p {
+            font-size: clamp(16px, 4vw, 20px);
+            color: #333;
+        }
+
+        button {
+            width: 100%;                 /* ✅ Full lebar di HP */
+            max-width: 280px;            /* ✅ Tapi tetap cakep di desktop */
+
+            padding: 14px;
+            font-size: 16px;
+
+            background-color: #ff6b6b;
+            color: white;
+
+            border: none;
+            border-radius: 30px;
+
+            cursor: pointer;
+            margin-top: 15px;
+
+            box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+        }
+
+        button:hover {
+            background-color: #fa5252;
+        }
+
+        .card {
+            display: none;
+
+            background: white;
+            margin: 30px auto;
+            padding: 25px;
+
+            width: 90%;              /* ✅ Fleksibel */
+            max-width: 400px;
+
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+            animation: muncul 0.6s ease;
+        }
+
+        @keyframes muncul {
+            from {
+                transform: scale(0.85);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .emoji {
+            font-size: clamp(35px, 8vw, 50px);
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🎉 Selamat Ulang Tahun 🎉</h1>
+        <p>Klik tombol di bawah ini 🎶</p>
+
+        <button onclick="tampilUcapan()">🎁 Buka Ucapan 🎁</button>
+        <button onclick="toggleLagu()">⏯ Play / Pause Lagu</button>
+
+        <div class="card" id="ucapan">
+            <div class="emoji">🎂🎈💐</div>
+            <p>
+                Selamat ulang tahun CayyangKU! <br><br>
+                Semoga selalu sehat, panjang umur,  
+                dan semua keinginanmu tercapai.  
+                <br><br>
+                Bahagia selalu 🥳
+            </p>
+        </div>
+
+    </div>
+
+    <audio id="lagu" autoplay loop>
+        <source src="Panjang-Umur.mp3" type="audio/mpeg">
+    </audio>
+
+    <canvas id="salju"></canvas>
+
+    <script>
+        const lagu = document.getElementById("lagu");
+
+        function tampilUcapan() {
+            document.getElementById("ucapan").style.display = "block";
+        }
+
+        function toggleLagu() {
+            if (lagu.paused) {
+                lagu.play();
+            } else {
+                lagu.pause();
+            }
+        }
+
+        const canvas = document.getElementById("salju");
+        const ctx = canvas.getContext("2d");
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        const salju = [];
+        const jumlahSalju = 100;
+
+        for (let i = 0; i < jumlahSalju; i++) {
+            salju.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 3 + 1,
+                speed: Math.random() + 0.5
+            });
+        }
+
+        function gambarSalju() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+
+            for (let s of salju) {
+                ctx.moveTo(s.x, s.y);
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+            }
+
+            ctx.fill();
+            updateSalju();
+        }
+
+        function updateSalju() {
+            for (let s of salju) {
+                s.y += s.speed;
+
+                if (s.y > canvas.height) {
+                    s.y = 0;
+                    s.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        setInterval(gambarSalju, 30);
+    </script>
+
+</body>
+</html>
